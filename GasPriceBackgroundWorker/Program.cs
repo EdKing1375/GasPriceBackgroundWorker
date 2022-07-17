@@ -18,10 +18,8 @@ namespace GasPriceBackgroundWorker
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddHostedService<Worker>();
-                    services.AddHttpClient<IGasPriceService, GasPriceService>(client =>
-                    {
-                        client.BaseAddress = new Uri("https://api.eia.gov/series/?api_key=ec92aacd6947350dcb894062a4ad2d08&series_id=PET.EMD_EPD2D_PTE_NUS_DPG.W");
-                    });
+                    services.AddScoped<IGasPriceService, GasPriceService>();
+                    services.AddHttpClient<IGasPriceService, GasPriceService>();
                 });
     }
 }

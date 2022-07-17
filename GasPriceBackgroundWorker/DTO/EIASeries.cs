@@ -36,7 +36,7 @@ namespace GasPriceBackgroundWorker.DTO
         public string start { get; set; }
         public string end { get; set; }
         public DateTime updated { get; set; }
-        public List<List<PriceData>> data { get; set; }
+        public List<List<object>> data { get; set; }
     }
 
 }
