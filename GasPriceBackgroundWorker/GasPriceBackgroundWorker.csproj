@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>dotnet-GasPriceBackgroundWorker-E8EF4D0C-1E7E-4B5E-88EA-89F54950D89B</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="DTO\EIASeries.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.26" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
+    <PackageReference Include="Quartz" Version="3.4.0" />
+  </ItemGroup>
+</Project>
