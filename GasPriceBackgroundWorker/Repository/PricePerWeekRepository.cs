@@ -29,7 +29,7 @@ namespace GasPriceBackgroundWorker.Repository
                 var StartDate = DateTime.Now.AddDays(-daysOld).ToString("yyyyMMdd");
                 return context.PricePerWeeks
                      .Where(x =>
-                     string.Compare(x.PriceDate, StartDate) <=0
+                     string.Compare(x.PriceDate, StartDate) >=0
                      ).ToList();
             }
         }

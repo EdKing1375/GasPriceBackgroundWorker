@@ -30,7 +30,10 @@ namespace GasPriceBackgroundWorker.Jobs
                 var existingPrices = pricePerWeekRepo.GetPricePerWeekRange(daysOld);
 
                 var addPrices = TryToFindNewPricesToAdd(prices, existingPrices, daysOld);
-                pricePerWeekRepo.AddPricesPerWeek(addPrices);
+                if (addPrices.Count > 0)
+                {
+                    pricePerWeekRepo.AddPricesPerWeek(addPrices);
+                }
             }
             catch (Exception err)
             {
@@ -45,7 +48,7 @@ namespace GasPriceBackgroundWorker.Jobs
             {
                 prices.RemoveAll(x =>
                 existingPrices
-                .Select(y => 
+                .Select(y =>
                     y.PriceDate)
                     .Contains(x.PriceDate)
                 );
@@ -53,7 +56,7 @@ namespace GasPriceBackgroundWorker.Jobs
             prices.RemoveAll(x =>
                string.Compare(x.PriceDate, StartDate) <= 0
             );
-           return  prices;
+            return prices;
         }
 
         private List<PricePerWeek> MapDataToEntity(DTO.EIASeries series)
