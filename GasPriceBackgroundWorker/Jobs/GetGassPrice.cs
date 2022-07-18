@@ -29,29 +29,31 @@ namespace GasPriceBackgroundWorker.Jobs
                 int.TryParse(_configuration["DaysOld"], out int daysOld);
                 var existingPrices = pricePerWeekRepo.GetPricePerWeekRange(daysOld);
 
-                TryToAddNewPrices(prices, existingPrices, daysOld);
+                var addPrices = TryToFindNewPricesToAdd(prices, existingPrices, daysOld);
+                pricePerWeekRepo.AddPricesPerWeek(addPrices);
             }
-            catch (Exception err) 
+            catch (Exception err)
             {
                 logger.LogError("The GetGassPrice Job Failed ", err.Message);
             }
         }
 
-        private void TryToAddNewPrices(List<PricePerWeek> prices, List<PricePerWeek> existingPrices, int daysOld)
+        private List<PricePerWeek> TryToFindNewPricesToAdd(List<PricePerWeek> prices, List<PricePerWeek> existingPrices, int daysOld)
         {
-   
-
-            if (existingPrices != null)
+            var StartDate = DateTime.Now.AddDays(-daysOld).ToString("yyyyMMdd");
+            if (existingPrices != null && existingPrices.Count > 0)
             {
                 prices.RemoveAll(x =>
-                existingPrices.Select(y => y.PriceDate).Contains(x.PriceDate)
-                &&
-                DateTime.Parse(x.PriceDate,
-                System.Globalization.CultureInfo.InvariantCulture)
-                >= DateTime.Now.AddDays(-daysOld)
+                existingPrices
+                .Select(y => 
+                    y.PriceDate)
+                    .Contains(x.PriceDate)
                 );
             }
-            var newPrices = prices;
+            prices.RemoveAll(x =>
+               string.Compare(x.PriceDate, StartDate) <= 0
+            );
+           return  prices;
         }
 
         private List<PricePerWeek> MapDataToEntity(DTO.EIASeries series)

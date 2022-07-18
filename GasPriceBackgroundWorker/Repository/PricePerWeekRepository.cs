@@ -26,16 +26,14 @@ namespace GasPriceBackgroundWorker.Repository
         {
             using (context = new GassPriceContext(GetAllOptions()))
             {
-
+                var StartDate = DateTime.Now.AddDays(-daysOld).ToString("yyyyMMdd");
                 return context.PricePerWeeks
                      .Where(x =>
-                     DateTime.Parse(x.PriceDate,
-                     System.Globalization.CultureInfo.InvariantCulture)
-                     >= DateTime.Now.AddDays(-daysOld)
+                     string.Compare(x.PriceDate, StartDate) <=0
                      ).ToList();
             }
         }
-        public void AddPricePerWeek(List<PricePerWeek> pricesPerWeek)
+        public void AddPricesPerWeek(List<PricePerWeek> pricesPerWeek)
         {
             using (context = new GassPriceContext(GetAllOptions()))
             {

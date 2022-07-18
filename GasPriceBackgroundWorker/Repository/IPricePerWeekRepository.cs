@@ -5,7 +5,7 @@ namespace GasPriceBackgroundWorker.Repository
 {
     public interface IPricePerWeekRepository
     {
-        void AddPricePerWeek(List<PricePerWeek> pricePerWeek);
+        void AddPricesPerWeek(List<PricePerWeek> pricePerWeek);
         List<PricePerWeek> GetPricePerWeekRange(int startOfRange);
     }
 }
