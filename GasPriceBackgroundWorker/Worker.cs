@@ -8,6 +8,7 @@ using GasPriceBackgroundWorker.Jobs;
 using Microsoft.Extensions.Configuration;
 using System;
 using GasPriceBackgroundWorker.Services;
+using GasPriceBackgroundWorker.Repository;
 
 namespace GasPriceBackgroundWorker
 {
@@ -18,11 +19,13 @@ namespace GasPriceBackgroundWorker
         private StdSchedulerFactory _stdSchedulerFactory;
         private readonly IConfiguration _configuration;
         private readonly IGasPriceService _service;
-        public Worker(ILogger<Worker> logger, IConfiguration configuration, IGasPriceService service)
+        private readonly IPricePerWeekRepository _repo;
+        public Worker(ILogger<Worker> logger, IConfiguration configuration, IGasPriceService service, IPricePerWeekRepository repo)
         {
             _logger = logger;
             _configuration = configuration;
             _service = service;
+            _repo = repo;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -49,9 +52,10 @@ namespace GasPriceBackgroundWorker
                 .WithIdentity("job", "group1")
                 .Build();
 
-
             getGasPrices.JobDataMap.Add("logger", _logger);
             getGasPrices.JobDataMap.Add("service", _service);
+            getGasPrices.JobDataMap.Add("repo", _repo);
+            getGasPrices.JobDataMap.Add("config", _configuration);
 
             ITrigger trigger = TriggerBuilder.Create()
                 .WithIdentity("myTrigger", "group1")
