@@ -24,7 +24,7 @@ namespace GasPriceBackgroundWorker.Jobs
             try
             {
                 var series = await gasPriceService.GetEIASeries();
-                var prices = MapDataToEntity(series);
+                var prices = MapDataToPricesPerWork(series);
 
                 int.TryParse(_configuration["DaysOld"], out int daysOld);
                 var existingPrices = pricePerWeekRepo.GetPricePerWeekRange(daysOld);
@@ -59,7 +59,7 @@ namespace GasPriceBackgroundWorker.Jobs
             return prices;
         }
 
-        private List<PricePerWeek> MapDataToEntity(DTO.EIASeries series)
+        private List<PricePerWeek> MapDataToPricesPerWork(DTO.EIASeries series)
         {
             var seriesData = series.series[0].data;
 
